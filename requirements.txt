@@ -1,0 +1,13 @@
+Flask
+Flask-SQLAlchemy
+SQLAlchemy
+flask_cors
+psycopg2-binary
+Celery
+redis
+pandas
+dask
+requests
+aiohttp
+validators
+schedule

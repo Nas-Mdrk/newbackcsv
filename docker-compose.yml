@@ -1,0 +1,33 @@
+services:  
+
+  celery:
+    build: .
+    environment:
+      - CELERY_BROKER_URL=amqp://jbSZlG3RMwAgMBkL:qQf6m_lOzS6tX9_gLnsElTuk3U14gLHa@junction.proxy.rlwy.net:38064//
+      - CELERY_RESULT_BACKEND=redis://:tWYPbXBoVeTItNNRPBiHgjcQnntiPAWD@junction.proxy.rlwy.net:20660/0
+      - TZ=Asia/Gaza
+    command: celery -A app.celery worker --loglevel=info 
+    deploy:
+      replicas: 4
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4G
+    networks:
+      - reseau_docker
+
+  flask:
+    build: .
+    ports:
+      - '5000:5000'
+    environment:
+      - CELERY_BROKER_URL=amqp://jbSZlG3RMwAgMBkL:qQf6m_lOzS6tX9_gLnsElTuk3U14gLHa@junction.proxy.rlwy.net:38064//
+      - CELERY_RESULT_BACKEND=redis://:tWYPbXBoVeTItNNRPBiHgjcQnntiPAWD@junction.proxy.rlwy.net:20660/0
+      - SQLALCHEMY_DATABASE_URI=postgresql://postgres:yxhPmwwwpisNQMfWGUeHTlEkdWDRSkLp@junction.proxy.rlwy.net:32235/railway
+      - TZ=Asia/Gaza
+    networks:
+      - reseau_docker
+
+networks:
+  reseau_docker:
+    external: true
