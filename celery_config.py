@@ -31,9 +31,6 @@ def make_celery(app):
             },
             'socket_timeout': 30          # Délai avant expiration de la connexion socket
         }
-         # Enable debug level logging
-        'worker_log_level': 'DEBUG',
-        'worker_redirect_stdouts_level': 'DEBUG'
     })
     
     return celery
