@@ -36,16 +36,6 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - ./uploads:/app/uploads 
   
-  frontend:
-    build:
-      context: ../projetcsv
-      dockerfile: Dockerfile.dev
-    container_name: vue_container_dev
-      #dockerfile: Dockerfile
-    #container_name: vue_container
-    volumes:
-      - ../projetcsv:/app  # Monte le répertoire de l'application pour les changements en temps réel
-    ports:
-      - '8080:80' 
+
       
  
