@@ -1,4 +1,4 @@
-/# app.py
+# app.py
 from flask import Flask, request, jsonify, send_file, make_response,  render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
