@@ -31,7 +31,7 @@ app = Flask(__name__)
 #frontend_url = os.getenv("FRONTEND_URL", "https://csv-analyzer-two.vercel.app")
 #CORS(app, supports_credentials=True, resources={r"/*": {"origins": frontend_url}})
 # Exemple de configuration CORS
-CORS(app, supports_credentials=True, origins=["https://csv-analyzer-two.vercel.app"])
+CORS(app, supports_credentials=True, origins=["csv-analyzer-production.up.railway.app"])
 #CORS(app, supports_credentials=True, resources={r"/*": {"origins": "https://csv-analyzer-two.vercel.app"}})
 # Configurer Celery/Configurer SQLAlchemy
 app.config['broker_url'] = 'amqp://z28SN5429pup5xwC:pLm83EcfbnI76Ktpz-yke9QmZp4ScyjL@autorack.proxy.rlwy.net:16856/%2F'
