@@ -28,10 +28,11 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 # Configurer CORS pour permettre les cookies
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:8080"}})
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:8080")
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": frontend_url}})
 # Configurer Celery/Configurer SQLAlchemy
-app.config['CELERY_BROKER_URL'] = 'amqp://jbSZlG3RMwAgMBkL:qQf6m_lOzS6tX9_gLnsElTuk3U14gLHa@junction.proxy.rlwy.net:38064//'
-app.config['CELERY_RESULT_BACKEND'] = 'redis://:tWYPbXBoVeTItNNRPBiHgjcQnntiPAWD@junction.proxy.rlwy.net:20660/0'# os.getenv('CELERY_RESULT_BACKEND')#
+app.config['broker_url'] = 'amqp://z28SN5429pup5xwC:pLm83EcfbnI76Ktpz-yke9QmZp4ScyjL@autorack.proxy.rlwy.net:16856/%2F'
+app.config['result_backend'] = 'redis://default:eoLLKKdgGxhfcOtaBGJEqWjcQPXUJEnW@junction.proxy.rlwy.net:25101/0'# os.getenv('CELERY_RESULT_BACKEND')#
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:yxhPmwwwpisNQMfWGUeHTlEkdWDRSkLp@junction.proxy.rlwy.net:32235/railway'#os.getenv('SQLALCHEMY_DATABASE_URI')
 db.init_app(app)
 
@@ -795,9 +796,12 @@ def remove_columns_route():
         return jsonify({'error': 'Au moins une colonne à supprimer est requise'}), 400
 
     # Enregistrer le fichier téléchargé
-    os.makedirs('uploads', exist_ok=True)
-    file_path = os.path.join('uploads', file.filename)
+    os.makedirs('/app/uploads', exist_ok=True)
+    file_path = os.path.join('/app/uploads', file.filename)
     file.save(file_path)
+    if not os.path.exists(file_path):
+        logging.info("le fichier n'existe pas 803")
+        raise FileNotFoundError(f"Le fichier {file_path} n'existe pas.")
 
     try:
         # Obtenir le poids du fichier en Mo
@@ -1138,8 +1142,9 @@ def validate_urls_route():
         return jsonify({'error': 'Aucune colonne URL spécifiée'}), 400
 
     # Enregistrer le fichier téléchargé
-    os.makedirs('uploads', exist_ok=True)
-    file_path = os.path.join('uploads', file.filename)
+    os.makedirs('/app/uploads', exist_ok=True)
+    file_path = os.path.join('/app/uploads', file.filename)
+    
     try:
         file.save(file_path)
         logging.info(f"Fichier enregistré à {file_path}")
@@ -1670,12 +1675,14 @@ def compare_two_csv_route():
     
     try:
         # Sauvegarder les fichiers dans le répertoire de téléchargement
-        file1_path = os.path.join('uploads', FileNameGenerator.generate_unique_filename(file1.filename))
-        file2_path = os.path.join('uploads', FileNameGenerator.generate_unique_filename(file2.filename))
+        file1_path = os.path.join('/app/uploads', FileNameGenerator.generate_unique_filename(file1.filename))
+        file2_path = os.path.join('/app/uploads', FileNameGenerator.generate_unique_filename(file2.filename))
         
         file1.save(file1_path)
         file2.save(file2_path)
-
+        if not os.path.exists(file1_path):
+            logging.info("le fichier n'existe pas 1083")
+            raise FileNotFoundError(f"Le fichier {file1_path} n'existe pas.")
         # Calcul des métadonnées pour le premier fichier
         poids = os.path.getsize(file1_path) / (1024 * 1024)  # Convertir en Mo
         nombre_de_lignes, nombre_de_colonnes = count_rows_columns(file1_path)

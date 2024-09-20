@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URI = 'postgresql://postgres:postgres@host.docker.internal/csv'
+DATABASE_URI = 'postgresql://postgres:yxhPmwwwpisNQMfWGUeHTlEkdWDRSkLp@junction.proxy.rlwy.net:32235/railway'
 engine = create_engine(DATABASE_URI)
 Session = sessionmaker(bind=engine)
 

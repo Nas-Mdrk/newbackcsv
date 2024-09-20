@@ -1,6 +1,8 @@
 # Utilisez une image Python comme base
 FROM python:3.9-slim
 
+# Créer un répertoire pour les fichiers
+#RUN mkdir -p /app/uploads
 # Définir le répertoire de travail dans le conteneur
 WORKDIR /app
 

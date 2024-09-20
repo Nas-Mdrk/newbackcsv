@@ -1,11 +1,18 @@
-services:  
+services: 
 
+  
   celery:
     build: .
+    volumes:
+      - .:/app
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./uploads:/app/uploads
     environment:
-      - CELERY_BROKER_URL=amqp://jbSZlG3RMwAgMBkL:qQf6m_lOzS6tX9_gLnsElTuk3U14gLHa@junction.proxy.rlwy.net:38064//
-      - CELERY_RESULT_BACKEND=redis://:tWYPbXBoVeTItNNRPBiHgjcQnntiPAWD@junction.proxy.rlwy.net:20660/0
+      - CELERY_BROKER_URL=amqp://z28SN5429pup5xwC:pLm83EcfbnI76Ktpz-yke9QmZp4ScyjL@autorack.proxy.rlwy.net:16856/%2F
+      - CELERY_RESULT_BACKEND=redis://default:eoLLKKdgGxhfcOtaBGJEqWjcQPXUJEnW@junction.proxy.rlwy.net:25101/0
       - TZ=Asia/Gaza
+      - SAVE_DIRECTORY=/app/uploader
     command: celery -A app.celery worker --loglevel=info 
     deploy:
       replicas: 4
@@ -13,21 +20,32 @@ services:
         limits:
           cpus: '4'
           memory: 4G
-    networks:
-      - reseau_docker
+  
 
   flask:
     build: .
     ports:
       - '5000:5000'
     environment:
-      - CELERY_BROKER_URL=amqp://jbSZlG3RMwAgMBkL:qQf6m_lOzS6tX9_gLnsElTuk3U14gLHa@junction.proxy.rlwy.net:38064//
-      - CELERY_RESULT_BACKEND=redis://:tWYPbXBoVeTItNNRPBiHgjcQnntiPAWD@junction.proxy.rlwy.net:20660/0
+      - CELERY_BROKER_URL=amqp://z28SN5429pup5xwC:pLm83EcfbnI76Ktpz-yke9QmZp4ScyjL@autorack.proxy.rlwy.net:16856/%2F
+      - CELERY_RESULT_BACKEND=redis://default:eoLLKKdgGxhfcOtaBGJEqWjcQPXUJEnW@junction.proxy.rlwy.net:25101/0
       - SQLALCHEMY_DATABASE_URI=postgresql://postgres:yxhPmwwwpisNQMfWGUeHTlEkdWDRSkLp@junction.proxy.rlwy.net:32235/railway
       - TZ=Asia/Gaza
-    networks:
-      - reseau_docker
-
-networks:
-  reseau_docker:
-    external: true
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./uploads:/app/uploads 
+  
+  frontend:
+    build:
+      context: ../projetcsv
+      dockerfile: Dockerfile.dev
+    container_name: vue_container_dev
+      #dockerfile: Dockerfile
+    #container_name: vue_container
+    volumes:
+      - ../projetcsv:/app  # Monte le répertoire de l'application pour les changements en temps réel
+    ports:
+      - '8080:80' 
+      
+ 
