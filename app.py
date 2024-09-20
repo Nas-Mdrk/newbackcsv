@@ -35,7 +35,7 @@ CORS(app, supports_credentials=True, origins=["https://csv-analyzer-two.vercel.a
 #CORS(app, supports_credentials=True, resources={r"/*": {"origins": "https://csv-analyzer-two.vercel.app"}})
 # Configurer Celery/Configurer SQLAlchemy
 app.config['broker_url'] = 'amqp://z28SN5429pup5xwC:pLm83EcfbnI76Ktpz-yke9QmZp4ScyjL@autorack.proxy.rlwy.net:16856/%2F'
-app.config['result_backend'] = 'redis://default:eoLLKKdgGxhfcOtaBGJEqWjcQPXUJEnW@junction.proxy.rlwy.net:25101/0'# os.getenv('CELERY_RESULT_BACKEND')#
+app.config['result_backend'] = 'redis://redis:6379/0'# os.getenv('CELERY_RESULT_BACKEND')#
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:yxhPmwwwpisNQMfWGUeHTlEkdWDRSkLp@junction.proxy.rlwy.net:32235/railway'#os.getenv('SQLALCHEMY_DATABASE_URI')
 db.init_app(app)
 
