@@ -30,7 +30,7 @@ app = Flask(__name__)
 # Configurer CORS pour permettre les cookies
 #frontend_url = os.getenv("FRONTEND_URL", "https://csv-analyzer-two.vercel.app")
 #CORS(app, supports_credentials=True, resources={r"/*": {"origins": frontend_url}})
-CORS(app, resources={r"/*": {"origins": "https://csv-analyzer-two.vercel.app"}})
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "https://csv-analyzer-two.vercel.app"}})
 # Configurer Celery/Configurer SQLAlchemy
 app.config['broker_url'] = 'amqp://z28SN5429pup5xwC:pLm83EcfbnI76Ktpz-yke9QmZp4ScyjL@autorack.proxy.rlwy.net:16856/%2F'
 app.config['result_backend'] = 'redis://default:eoLLKKdgGxhfcOtaBGJEqWjcQPXUJEnW@junction.proxy.rlwy.net:25101/0'# os.getenv('CELERY_RESULT_BACKEND')#
