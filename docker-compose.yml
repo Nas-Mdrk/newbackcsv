@@ -3,9 +3,17 @@ services:
     image: 'redis:latest'
     ports:
       - '6379:6379'
-    networks:
-      - reseau_docker  
   
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - '5672:5672'  # Port pour AMQP
+      - '15672:15672'  # Port pour l'interface de gestion
+    environment:
+      - RABBITMQ_DEFAULT_USER=iuseit  # Change avec le nom d'utilisateur que tu souhaites
+      - RABBITMQ_DEFAULT_PASS=pLm83EcfbnI76Ktpz-yke9QmZp4Scyj  # Change avec le mot de passe que tu souhaites
+    
   celery:
     build: .
     volumes:
@@ -14,7 +22,7 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - ./uploads:/app/uploads
     environment:
-      - CELERY_BROKER_URL=amqp://z28SN5429pup5xwC:pLm83EcfbnI76Ktpz-yke9QmZp4ScyjL@autorack.proxy.rlwy.net:16856/%2F
+      - CELERY_BROKER_URL=amqp://iuseit:pLm83EcfbnI76Ktpz-yke9QmZp4Scyj@rabbitmq:5672/%2F
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - TZ=Asia/Gaza
       - SAVE_DIRECTORY=/app/uploader
@@ -32,7 +40,7 @@ services:
     ports:
       - '5000:5000'
     environment:
-      - CELERY_BROKER_URL=amqp://z28SN5429pup5xwC:pLm83EcfbnI76Ktpz-yke9QmZp4ScyjL@autorack.proxy.rlwy.net:16856/%2F
+      - CELERY_BROKER_URL=amqp://iuseit:pLm83EcfbnI76Ktpz-yke9QmZp4Scyj@rabbitmq:5672/%2F
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - SQLALCHEMY_DATABASE_URI=postgresql://postgres:yxhPmwwwpisNQMfWGUeHTlEkdWDRSkLp@junction.proxy.rlwy.net:32235/railway
       - TZ=Asia/Gaza
