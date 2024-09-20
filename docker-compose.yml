@@ -33,6 +33,9 @@ services:
         limits:
           cpus: '4'
           memory: 4G
+    depends_on:
+      - rabbitmq
+      - redis
   
 
   flask:
@@ -48,7 +51,9 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
       - ./uploads:/app/uploads 
-  
+    depends_on:
+      - rabbitmq
+      - redis
 
       
  
