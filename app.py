@@ -63,7 +63,7 @@ def index():
         # Le cookie n'existe pas encore, donc le créer
         unique_id = str(uuid.uuid4())  # Générer un identifiant unique
         expires = datetime.utcnow() + timedelta(days=30)
-        resp.set_cookie('cookie_id', unique_id, expires=expires, httponly=True, secure=True, samesite='Lax')
+        resp.set_cookie('cookie_id', unique_id, expires=expires, httponly=True, secure=True, samesite='None')
         message = ' Un nouveau cookie a été créé.'
     else:
         # Le cookie existe déjà, donc il est considéré comme valide
