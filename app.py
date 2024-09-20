@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 # Configurer CORS pour permettre les cookies
-frontend_url = os.getenv("FRONTEND_URL", "http://localhost:8080")
+frontend_url = os.getenv("FRONTEND_URL", "https://venerable-bienenstitch-e1bf89.netlify.app")
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": frontend_url}})
 # Configurer Celery/Configurer SQLAlchemy
 app.config['broker_url'] = 'amqp://z28SN5429pup5xwC:pLm83EcfbnI76Ktpz-yke9QmZp4ScyjL@autorack.proxy.rlwy.net:16856/%2F'
