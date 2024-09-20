@@ -26,7 +26,7 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - TZ=Asia/Gaza
       - SAVE_DIRECTORY=/app/uploader
-    command: celery -A app.celery worker --loglevel=info 
+    command: sh -c "until nc -z rabbitmq 5672; do echo Waiting for RabbitMQ; sleep 5; done; celery -A app.celery worker --loglevel=info"
     deploy:
       replicas: 4
       resources:
