@@ -9,7 +9,7 @@ services:
       - ./uploads:/app/uploads
     environment:
       - CELERY_BROKER_URL=amqp://2R6JhbKKsyxi3tn8:SaYu-e~EGDFbBbTP3BVO-YXjqfefNQJr@junction.proxy.rlwy.net:41673/%2F
-      - CELERY_RESULT_BACKEND=redis://default:junction.proxy.rlwy.net:16188/0
+      - CELERY_RESULT_BACKEND=redis://aPaQvgIZhQoOWRDsAmilHmbFOXNyufGS@junction.proxy.rlwy.net:16188/0
       - TZ=Asia/Gaza
       - SAVE_DIRECTORY=/app/uploader
     command: celery -A app.celery worker --loglevel=info"
@@ -28,7 +28,7 @@ services:
       - '5000:5000'
     environment:
       - CELERY_BROKER_URL=amqp://2R6JhbKKsyxi3tn8:SaYu-e~EGDFbBbTP3BVO-YXjqfefNQJr@junction.proxy.rlwy.net:41673/%2F
-      - CELERY_RESULT_BACKEND=redis://default:junction.proxy.rlwy.net:16188/0
+      - CELERY_RESULT_BACKEND=redis://aPaQvgIZhQoOWRDsAmilHmbFOXNyufGS@junction.proxy.rlwy.net:16188/0
       - SQLALCHEMY_DATABASE_URI=postgresql://postgres:yxhPmwwwpisNQMfWGUeHTlEkdWDRSkLp@junction.proxy.rlwy.net:32235/railway
       - TZ=Asia/Gaza
     volumes:
