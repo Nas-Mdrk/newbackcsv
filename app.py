@@ -25,7 +25,7 @@ import logging
 
 app = Flask(__name__)
 # Configurer CORS pour permettre les cookies
-frontend_url = os.getenv("FRONTEND_URL", "http://localhost:8080")
+frontend_url = os.getenv("FRONTEND_URL", "https://venerable-bienenstitch-e1bf89.netlify.app")
 CORS(app, supports_credentials=True, resources={r"/*": {"origins": frontend_url}})
 # Exemple de configuration CORS
 #CORS(app, supports_credentials=True, origins=["https://venerable-bienenstitch-e1bf89.netlify.app"])
