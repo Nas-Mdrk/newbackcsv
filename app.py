@@ -856,6 +856,7 @@ def remove_columns_route():
             'task_id': task.id
         })
     except Exception as e:
+        logging.info({'error': f"Erreur lors du traitement du fichier : {str(e)}"})
         return jsonify({'error': f"Erreur lors du traitement du fichier : {str(e)}"}), 500
 
 @app.route('/extract_columns', methods=['POST'])
