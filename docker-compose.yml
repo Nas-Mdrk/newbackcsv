@@ -8,17 +8,20 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - ./uploads:/app/uploads
     environment:
-      - CELERY_BROKER_URL=amqp://2R6JhbKKsyxi3tn8:SaYu-e~EGDFbBbTP3BVO-YXjqfefNQJr@junction.proxy.rlwy.net:41673/%2F
-      - CELERY_RESULT_BACKEND=redis://aPaQvgIZhQoOWRDsAmilHmbFOXNyufGS@junction.proxy.rlwy.net:16188/0
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - TZ=Asia/Gaza
       - SAVE_DIRECTORY=/app/uploader
-    command: celery -A app.celery worker --loglevel=info"
+    command: celery -A app.celery worker --loglevel=info
     deploy:
       replicas: 4
       resources:
         limits:
           cpus: '4'
           memory: 4G
+    depends_on:
+      - rabbitmq
+      - redis
 
   
 
@@ -27,14 +30,33 @@ services:
     ports:
       - '5000:5000'
     environment:
-      - CELERY_BROKER_URL=amqp://2R6JhbKKsyxi3tn8:SaYu-e~EGDFbBbTP3BVO-YXjqfefNQJr@junction.proxy.rlwy.net:41673/%2F
-      - CELERY_RESULT_BACKEND=redis://aPaQvgIZhQoOWRDsAmilHmbFOXNyufGS@junction.proxy.rlwy.net:16188/0
+      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
       - SQLALCHEMY_DATABASE_URI=postgresql://postgres:yxhPmwwwpisNQMfWGUeHTlEkdWDRSkLp@junction.proxy.rlwy.net:32235/railway
       - TZ=Asia/Gaza
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - ./uploads:/app/uploads 
+      - ./uploads:/app/uploads
+    depends_on:
+      - rabbitmq
+      - redis
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "15672:15672"  # Port pour accéder à l'interface de gestion de RabbitMQ
+      - "5672:5672"    # Port pour les connexions AMQP
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"    # Port pour Redis
+
+
 
 
       

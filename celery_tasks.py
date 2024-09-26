@@ -973,9 +973,10 @@ def clean_and_validate_data(self, file_path, validation_rules):
                     elif action == "strip_spaces":
                         df[column] = df[column].map_partitions(
                             lambda part: part.apply(
-                                lambda x: re.sub(r'[^\w\s]', '', re.sub(r'\s+', ' ', str(x)).strip()) if not pd.isnull(x) else x,
-                                meta=('x', 'object')
-                            )
+                                lambda x: re.sub(r'[^\w\s]', '', re.sub(r'\s+', ' ', str(x)).strip()) if not pd.isnull(x) else x
+
+                            ),
+                            meta=('x', 'object')
                         )
                     elif action == "capitalize":
                         df[column] = df[column].map_partitions(lambda part: part.str.lower(), meta=('x', 'object'))

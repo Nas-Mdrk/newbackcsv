@@ -22,16 +22,17 @@ from datetime import datetime,date
 import uuid
 import logging
 
+
+app = Flask(__name__)
+# Configurer CORS pour permettre les cookies
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:8080")
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": frontend_url}})
+# Exemple de configuration CORS
+#CORS(app, supports_credentials=True, origins=["https://venerable-bienenstitch-e1bf89.netlify.app"])
 # Configurer le logger
 logging.basicConfig(level=logging.INFO)  # Niveau de log INFO, ajustez selon vos besoins
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
-# Configurer CORS pour permettre les cookies
-#frontend_url = os.getenv("FRONTEND_URL", "https://venerable-bienenstitch-e1bf89.netlify.app")
-#CORS(app, supports_credentials=True, resources={r"/*": {"origins": frontend_url}})
-# Exemple de configuration CORS
-CORS(app, supports_credentials=True, origins=["https://csv-analyzer-production.up.railway.app"])
 #CORS(app, supports_credentials=True, resources={r"/*": {"origins": "https://csv-analyzer-two.vercel.app"}})
 # Configurer Celery/Configurer SQLAlchemy
 app.config['broker_url'] = 'amqp://2R6JhbKKsyxi3tn8:SaYu-e~EGDFbBbTP3BVO-YXjqfefNQJr@junction.proxy.rlwy.net:41673/%2F'
@@ -660,8 +661,8 @@ def manipulate_two_csv_route():
             return jsonify({'error': 'Index must be an integer'}), 400
 
         # Sauvegarder les fichiers dans le répertoire de téléchargement
-        file1_path = os.path.join('uploads', FileNameGenerator.generate_unique_filename(file1.filename))
-        file2_path = os.path.join('uploads', FileNameGenerator.generate_unique_filename(file2.filename))
+        file1_path = os.path.join('/app/uploads', FileNameGenerator.generate_unique_filename(file1.filename))
+        file2_path = os.path.join('/app/uploads', FileNameGenerator.generate_unique_filename(file2.filename))
 
         file1.save(file1_path)
         file2.save(file2_path)
@@ -878,8 +879,8 @@ def extract_columns_route():
         return jsonify({'error': 'Aucune colonne spécifiée pour extraction'}), 400
 
     # Enregistrer le fichier téléchargé
-    os.makedirs('uploads', exist_ok=True)
-    file_path = os.path.join('uploads', file.filename)
+    os.makedirs('/app/uploads', exist_ok=True)
+    file_path = os.path.join('/app/uploads', file.filename)
     file.save(file_path)
 
     try:
@@ -971,8 +972,8 @@ def add_column_with_formula_route():
     new_column_name = sanitize_column_name(new_column_name)
 
     # Enregistrer le fichier téléchargé
-    os.makedirs('uploads', exist_ok=True)
-    file_path = os.path.join('uploads', file.filename)
+    os.makedirs('/app/uploads', exist_ok=True)
+    file_path = os.path.join('/app/uploads', file.filename)
     file.save(file_path)
 
     try:
@@ -1047,14 +1048,14 @@ def clean_and_validate_data_route():
         return jsonify({'error': 'Aucune règle de validation trouvée dans la requête'}), 400
 
     validation_rules = json.loads(validation_rules)
-    os.makedirs('uploads', exist_ok=True)
+    os.makedirs('/app/uploads', exist_ok=True)
 
     try:
         if file.filename == '':
             return jsonify({'error': 'Nom de fichier invalide'}), 400
 
         # Sauvegarde du fichier dans un répertoire temporaire avec un nom unique
-        save_path = os.path.join('uploads', FileNameGenerator.generate_unique_filename(file.filename))
+        save_path = os.path.join('/app/uploads', FileNameGenerator.generate_unique_filename(file.filename))
         file.save(save_path)
 
         # Obtenir le poids du fichier en Mo
@@ -1443,8 +1444,8 @@ def detect_outliers_route():
     #detect_non_numeric = request.form.get('detect_non_numeric', 'false').lower() == 'true'
 
     # Enregistrer le fichier téléchargé
-    os.makedirs('uploads', exist_ok=True)
-    file_path = os.path.join('uploads', file.filename)
+    os.makedirs('/app/uploads', exist_ok=True)
+    file_path = os.path.join('/app/uploads', file.filename)
     try:
         file.save(file_path)
         logging.info(f"Fichier enregistré à {file_path}")
@@ -1535,8 +1536,8 @@ def detect_non_numeric_route():
         return jsonify({'error': 'Aucune colonne clé spécifiée'}), 400
 
     # Enregistrer le fichier téléchargé
-    os.makedirs('uploads', exist_ok=True)
-    file_path = os.path.join('uploads', file.filename)
+    os.makedirs('/app/uploads', exist_ok=True)
+    file_path = os.path.join('/app/uploads', file.filename)
     try:
         file.save(file_path)
         logging.info(f"Fichier enregistré à {file_path}")
